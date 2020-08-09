@@ -73,3 +73,44 @@ where
         }
     }
 }
+
+/// ```
+/// use fmt_utils::fast_fmt::{Repeated, fmt_to_cleared_string};
+///
+/// let mut buf = String::new();
+///
+/// assert_eq!(fmt_to_cleared_string(&mut buf, Repeated { value: "", count: 0 }, &fast_fmt::Display), "");
+/// assert_eq!(fmt_to_cleared_string(&mut buf, Repeated { value: 'a', count: 0 }, &fast_fmt::Display), "");
+/// assert_eq!(fmt_to_cleared_string(&mut buf, Repeated { value: "ab", count: 0 }, &fast_fmt::Display), "");
+/// assert_eq!(fmt_to_cleared_string(&mut buf, Repeated { value: "", count: 1 }, &fast_fmt::Display), "");
+/// assert_eq!(fmt_to_cleared_string(&mut buf, Repeated { value: 'a', count: 1 }, &fast_fmt::Display), "a");
+/// assert_eq!(fmt_to_cleared_string(&mut buf, Repeated { value: "ab", count: 1 }, &fast_fmt::Display), "ab");
+/// assert_eq!(fmt_to_cleared_string(&mut buf, Repeated { value: "", count: 2 }, &fast_fmt::Display), "");
+/// assert_eq!(fmt_to_cleared_string(&mut buf, Repeated { value: 'a', count: 2 }, &fast_fmt::Display), "aa");
+/// assert_eq!(fmt_to_cleared_string(&mut buf, Repeated { value: "ab", count: 2 }, &fast_fmt::Display), "abab");
+/// ```
+#[derive(Copy, Clone, Debug)]
+pub struct Repeated<T> {
+    pub value: T,
+    pub count: usize,
+}
+
+impl<T, S> fast_fmt::Fmt<S> for Repeated<T>
+where
+    T: fast_fmt::Fmt<S>,
+{
+    fn fmt<W: fast_fmt::Write>(&self, writer: &mut W, strategy: &S) -> Result<(), W::Error> {
+        for _ in 0..self.count {
+            self.value.fmt(writer, strategy)?;
+        }
+        Ok(())
+    }
+
+    fn size_hint(&self, strategy: &S) -> usize {
+        if self.count == 0 {
+            0
+        } else {
+            self.value.size_hint(strategy) * self.count
+        }
+    }
+}
