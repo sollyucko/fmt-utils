@@ -3,6 +3,12 @@ name = "fmt-utils"
 version = "0.1.0"
 authors = ["sollyucko <solly.ucko@gmail.com>"]
 edition = "2018"
+description = "Various utilities for use with std::fmt::Display and fast_fmt::Fmt"
+license = "CC0-1.0"
+repository = "https://github.com/sollyucko/fmt-utils"
+readme = "README.md"
+keywords = ["fmt", "utils", "fast_fmt", "formatting", "display", "utilities", "utilities-library", "utility-library"]
+categories = ["value-formatting", "rust-patterns"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
